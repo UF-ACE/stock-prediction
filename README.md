@@ -32,6 +32,3 @@ This project uses Python3. You will need to have a compatible version of Python 
 
 A list of required packages can be found in `requirements.txt`. These can be installed automatically using the following command:
 `pip install -r requirements.txt`
-
-
-
