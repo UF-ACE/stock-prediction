@@ -12,8 +12,7 @@ Once done, you'll want to add the original repo as an upstream target:
 `git remote add upstream https://github.com/UF-ACE/stock-prediction.git`
 
 To sync the forked repo with changes in the original, use the following commands:
-`git fetch upstream`
-`git merge upstream/branch-name`
+`git pull upstream/branch-name`
 Where branch-name is the name of a branch in the original repo. Note that this pulls branch-name's changes into the branch of the fork you currently have checked out.
 
 To submit changes to the original repo, follow the steps below:
