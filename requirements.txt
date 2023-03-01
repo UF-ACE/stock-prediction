@@ -1,1 +1,2 @@
-# Nothing yet...
+discord.py
+python-dotenv
