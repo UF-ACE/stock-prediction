@@ -1,3 +1,4 @@
 discord.py
 python-dotenv
-finnhub-python
+GoogleNews
+-e git+https://github.com/jaARke/finnhub-python.git#egg=finnhub-python

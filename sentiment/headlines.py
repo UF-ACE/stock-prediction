@@ -2,6 +2,8 @@ import requests
 from dotenv import load_dotenv, find_dotenv
 import os
 import finnhub
+import datetime
+from GoogleNews import GoogleNews
 
 load_dotenv(find_dotenv())
 NEWS_API_KEY = os.getenv('NEWS_API_KEY')
@@ -49,6 +51,24 @@ def retrieve_news_api(name: str, start: str, end: str) -> list[str]:
     return headlines
 
 
+# Given a company name, start, end dates -> return a list of news headlines from Google News API
+def retrieve_google_news(name: str, start: str, end: str) -> list[str]:
+    headlines = []
+    # Create the GoogleNews object
+    googlenews = GoogleNews(start=start, end=end, lang='en', region='US')
+
+    # Search for the common name
+    googlenews.search(name)
+    headlines += [googlenews.result()[x]['title'] for x in range(len(googlenews.result()))]
+
+    # Clear the object and search for the ticker
+    googlenews.clear()
+    googlenews.search(getTicker(name))
+    headlines += [googlenews.result()[x]['title'] for x in range(len(googlenews.result()))]
+    
+    return headlines
+    
+
 # Given a ticker, start, end dates -> return a list of news headlines from Finnhub API
 def retrieve_finnhub(ticker: str, start: str, end: str) -> list[str]:
     # Submit the request to the Finnhub API
@@ -59,8 +79,9 @@ def retrieve_finnhub(ticker: str, start: str, end: str) -> list[str]:
     return headlines
 
 
-def retrieve_headlines(name: str, start: str, end: str) -> list[str]:
+def retrieve_headlines(name: str, start: str = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d"), end: str = datetime.datetime.now().strftime("%Y-%m-%d")) -> list[str]:
     headlines = set()
-    headlines.update(retrieve_news_api(name, start, end))
     headlines.update(retrieve_finnhub(getTicker(name), start, end))
+    headlines.update(retrieve_news_api(name, start, end))
+    headlines.update(retrieve_google_news(name, datetime.datetime.strptime(start, "%Y-%m-%d").strftime("%m-%d-%Y"), datetime.datetime.strptime(end, "%Y-%m-%d").strftime("%m-%d-%Y")))
     return list(headlines)
