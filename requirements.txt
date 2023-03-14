@@ -1,1 +1,3 @@
-# Nothing yet...
+discord.py
+python-dotenv
+finnhub-python
