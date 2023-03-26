@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.errors import Forbidden
+from utils import orange_or_blue
 
 """This custom help command is a perfect replacement for the default one on any Discord Bot written in Discord.py!
 However, you must put "bot.remove_command('help')" in your bot, and the command must be in a cog for it to work.
@@ -35,7 +36,7 @@ async def send_embed(ctx, embed):
                 f"May you inform the server team about this issue? :slight_smile: ", embed=embed)
 
 
-class Help(commands.Cog):
+class help(commands.Cog):
     """
     Sends this help message
     """
@@ -66,7 +67,7 @@ class Help(commands.Cog):
                 owner = owner
 
             # starting to build embed
-            emb = discord.Embed(title='ACE Stock Bot', color=discord.Color.blue(),
+            emb = discord.Embed(title='ACE Stock Bot', color=orange_or_blue(),
                                 description=f'Use `{prefix}help <module>` to gain more information about that module '
                                             f':smiley:\n')
             emb.add_field(name='', value='', inline=False)
@@ -108,7 +109,7 @@ class Help(commands.Cog):
 
                     # making title - getting description from doc-string below class
                     emb = discord.Embed(title=f'{cog} - Commands', description=self.bot.cogs[cog].__doc__,
-                                        color=discord.Color.green())
+                                        color=orange_or_blue())
 
                     # getting commands from cog
                     for command in self.bot.get_cog(cog).get_commands():
@@ -123,13 +124,13 @@ class Help(commands.Cog):
             else:
                 emb = discord.Embed(title="What's that?!",
                                     description=f"I've never heard from a module called `{input[0]}` before :scream:",
-                                    color=discord.Color.orange())
+                                    color=orange_or_blue())
 
         # too many cogs requested - only one at a time allowed
         elif len(input) > 1:
             emb = discord.Embed(title="That's too much.",
                                 description="Please request only one module at once :sweat_smile:",
-                                color=discord.Color.orange())
+                                color=orange_or_blue())
 
         else:
             emb = discord.Embed(title="It's a magical place.",
@@ -137,11 +138,11 @@ class Help(commands.Cog):
                                             "Would you please be so kind to report that issue to me on github?\n"
                                             "https://github.com/nonchris/discord-fury/issues\n"
                                             "Thank you! ~Chris",
-                                color=discord.Color.red())
+                                color=orange_or_blue())
 
         # sending reply embed using our own function defined above
         await send_embed(ctx, emb)
 
 
 async def setup(bot):
-    await bot.add_cog(Help(bot))
+    await bot.add_cog(help(bot))

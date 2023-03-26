@@ -1,4 +1,6 @@
-discord.py
-python-dotenv
-GoogleNews
+discord.py==2.2.0
+python-dotenv==1.0.0
+GoogleNews==1.6.6
+setuptools==58.3.0
 -e git+https://github.com/jaARke/finnhub-python.git#egg=finnhub-python
+git+https://github.com/JustAnotherArchivist/snscrape.git
