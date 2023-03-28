@@ -31,3 +31,14 @@ This project uses Python3. You will need to have a compatible version of Python 
 
 A list of required packages can be found in `requirements.txt`. These can be installed automatically using the following command:
 `pip install -r requirements.txt`
+
+### Execution Instructions
+To run the project, and interact with the bot on your own machine, you will need 3 environment variables:
+- Discord bot token (see: [Creating a discord bot & getting a token](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token))
+- NewsAPI key (see: [NewsAPI website](https://newsapi.org/))
+- FinnHub API key (see: [FinnHub website](https://finnhub.io/))
+
+Place these environment variables in a file named `.env` with the format specified by `.env_sample`. After this is done, the bot can be run with the command:
+`python3 bot.py`
+
+## Bot Commands
