@@ -3,7 +3,7 @@ Attempts to provide a comprehensive analysis of stock behavior using two primary
 
 The project is split conceptually into 3 parts: sentiment analysis, trend analysis, and their union. Each of these parts will be discussed in detail below.
 
-For general information on creating and using a custom Discord bot, see [this article](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token).
+For general information on creating and using a custom Discord bot, see [this article](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token). These steps will need to be followed in order to interact with this project.
 
 ## Getting Started
 ### Using Git
