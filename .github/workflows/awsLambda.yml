@@ -42,9 +42,12 @@ jobs:
 
           # Get the new layer version ARN
           layer_arn=$(aws lambda list-layer-versions --layer-name $release_layer --query 'LayerVersions[0].LayerVersionArn' --output text)
-          
+
           # Update the lambda function to use the new layer
           aws lambda update-function-configuration --function-name ACEBot_handler --layers $layer_arn
+
+          # Delete the previous layer version
+          aws lambda delete-layer-version --layer-name $release_layer --version-number $(($layer_version - 1))
   
   upload_source:
     name: Upload Source to AWS Lambda
