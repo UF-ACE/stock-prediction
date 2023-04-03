@@ -1,6 +1,5 @@
 import requests
 import os
-from commands import sentiment, help
 import time
 
 APP_ID = os.environ.get("APP_ID")
@@ -79,9 +78,11 @@ class Interaction:
                 options = self.data.get("options")
 
                 if name == "sentiment":
+                    from commands import sentiment
                     self.send_embed(sentiment(options))
 
                 elif name == "help":
+                    from commands import help
                     self.send_embed(help(options))
 
             except Exception as e:
