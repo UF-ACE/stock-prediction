@@ -16,7 +16,7 @@ class Interaction:
         self.id = interaction.get("id")
         self.data = interaction.get("data")
         self.callback_url = f"https://discord.com/api/v10/interactions/{self.id}/{self.token}/callback"
-        self.webhook_url = f"https://discord.com/api/v10/webhooks/{APP_ID}/{self.token}"
+        self.webhook_url = f"https://discord.com/api/v10/webhooks/{APP_ID}/{self.token}/messages/@original"
         self.timestamp = time.time()
     
     def send_embed(self, embed: Embedding):
