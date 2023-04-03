@@ -39,6 +39,12 @@ jobs:
           echo "Uploading $release_id to $release_bucket_uri"
           aws s3 cp $release_id $release_bucket_uri
           aws lambda publish-layer-version --layer-name $release_layer  --content S3Bucket=$release_bucket,S3Key=$release_id --compatible-runtimes python3.9
+
+          # Get the new layer version ARN
+          layer_arn=$(aws lambda list-layer-versions --layer-name $release_layer --query 'LayerVersions[0].LayerVersionArn' --output text)
+          
+          # Update the lambda function to use the new layer
+          aws lambda update-function-configuration --function-name ACEBot_handler --layers $layer_arn
   
   upload_source:
     name: Upload Source to AWS Lambda
