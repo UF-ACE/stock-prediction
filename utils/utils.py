@@ -59,7 +59,7 @@ class Interaction:
     def send_embed(self, embed: Embedding):
         if not embed.footer:
             embed.set_footer(f"Request completed in {round(time.time() - self.timestamp, 2)}s")
-        requests.patch(self.webhook_url, json=embed.to_dict())
+        requests.patch(self.webhook_url, json={"embeds": [embed.to_dict()]})
     
     def respond(self):
         # Pong response
@@ -87,7 +87,7 @@ class Interaction:
 
             except Exception as e:
                 # Send an error message
-                requests.patch(self.webhook_url, json=self.ERROR.to_dict())
+                self.send_embed(self.ERROR)
                 raise Exception(f"[ERROR] {e}")
 
 
