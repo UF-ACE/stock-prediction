@@ -1,0 +1,73 @@
+name: Deploy to Lambda
+
+on:
+  push:
+    branches: [ master, lambda-migration ]
+
+jobs:
+  upload_deps:
+    name: Upload Layer to AWS Lambda
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+
+      - name: Zip it all up and upload to S3
+        env:
+          release_bucket: acestockbot
+          release_bucket_uri: s3://acestockbot
+          release_id: ${{ format('<REPO NAME>-{0}-dev.zip', github.head_ref )}}
+          release_layer: ${{ format('<REPO NAME>-{0}-dev', github.head_ref )}}
+        run: |
+          mkdir python/lib/python3.9/site-packages/
+          docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/; exit"
+          zip --quiet -r $release_id python
+          
+          aws s3 cp $release_id $release_bucket_uri
+          aws lambda publish-layer-version --layer-name $release_layer  --content S3Bucket=$release_bucket,S3Key=$release_id --compatible-runtimes python3.9
+  
+  upload_source:
+    name: Upload Source to AWS Lambda
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+      
+      - name: zip
+        uses: montudor/action-zip@v0.1.0
+        with:
+          args: zip -qq -r ./bundle.zip ./
+        
+      - name: default deploy
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-2
+          function_name: ACEBot_handler
+          zip_file: bundle.zip
+      
+
+      
+
