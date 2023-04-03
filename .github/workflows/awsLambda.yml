@@ -32,7 +32,7 @@ jobs:
           release_id: ${{ format('<REPO NAME>-{0}-dev.zip', github.head_ref )}}
           release_layer: ${{ format('<REPO NAME>-{0}-dev', github.head_ref )}}
         run: |
-          mkdir -p /python/lib/python3.9/site-packages
+          mkdir -p python/lib/python3.9/site-packages
           docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/; exit"
           zip --quiet -r $release_id python
           
