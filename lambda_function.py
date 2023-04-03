@@ -1,6 +1,6 @@
 import os
 from nacl.signing import VerifyKey
-from utils import Interaction
+from utils.discord import Interaction
 
 PUBLIC_KEY = os.environ.get("PUBLIC_KEY")
 

@@ -1,4 +1,6 @@
-from utils import get_headlines, get_ticker, get_social_media, Embedding
+from utils import get_ticker
+from utils.discord import Embedding
+from utils.sentiment import get_headlines, get_social_media
 
 
 def sentiment(options: list[str]) -> dict:

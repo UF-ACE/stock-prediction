@@ -1,4 +1,4 @@
-from utils import Embedding
+from utils.discord import Embedding
 
 VERSION = "1.0.0"
 
