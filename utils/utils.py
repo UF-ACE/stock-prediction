@@ -1,4 +1,5 @@
 import requests
+from utils.discord import Embedding
 
 
 # Given a company name, return the corresponding ticker
@@ -12,3 +13,7 @@ def get_ticker(query: str) -> str:
         return data['quotes'][0]['symbol']
     except Exception as e:
         raise Exception("Invalid company name.")
+
+
+def send_embed(webhook_url: str, embed: Embedding) -> None:
+        requests.patch(webhook_url, json={"embeds": [embed.to_dict()]}).raise_for_status()

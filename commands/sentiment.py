@@ -22,8 +22,8 @@ def sentiment(options: list[dict]) -> Embedding:
 
     # Get the data
     ticker = get_ticker(query)
-    headlines = get_headlines(query, ticker)
-    social_media = get_social_media(ticker)
+    headlines = get_headlines(query, ticker, start)
+    social_media = get_social_media(ticker, start)
     data = headlines + social_media
 
     # TODO: Analyze the data
