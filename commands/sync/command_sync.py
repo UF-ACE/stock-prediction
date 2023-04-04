@@ -4,7 +4,7 @@ import os
 
 APP_ID = os.environ.get("APP_ID")
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
-url = f"https://discord.com/api/v10/applications//commands{APP_ID}"
+url = f"https://discord.com/api/v10/applications/{APP_ID}/commands"
 headers = {
     "Authorization": f"Bot {BOT_TOKEN}"
 }
