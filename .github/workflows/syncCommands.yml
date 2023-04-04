@@ -8,15 +8,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout repo content
+      - name: checkout repo content
         uses: actions/checkout@v2 
 
-    - name: setup python
+      - name: setup python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9' 
 
-    - name: install python packages
+      - name: install python packages
         run: pip install -r requirements.txt
 
     - name: execute py script
