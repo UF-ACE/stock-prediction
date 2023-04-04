@@ -18,7 +18,7 @@ class Interaction:
     
     def send_embed(self, embed: Embedding):
         embed.set_footer(f"Request completed in {round(time.time() - self.timestamp, 2)}s\n" \
-                         "Powered by [UF ACE](https://uf-ace.com)")
+                         "Powered by UF ACE")
         requests.patch(self.webhook_url, json={"embeds": [embed.to_dict()]}).raise_for_status()
     
     def respond(self):
@@ -45,7 +45,7 @@ class Interaction:
 
             except Exception as e:
                 # Send an error message
-                embed = Embedding(":x:  Error", "The request could not be completed at this time.\
-                        \nIf this issue persists, please submit an issue on [GitHub](https://github.com/UF-ACE/stock-prediction).", color=0xFF0000)
+                embed = Embedding(":x:  Error", "The request could not be completed at this time." \
+                        "\nIf this issue persists, please submit an issue on [GitHub](https://github.com/UF-ACE/stock-prediction).", color=0xFF0000)
                 self.send_embed(embed)
                 raise Exception(f"[ERROR] {e}")

@@ -1,1 +1,1 @@
-from .utils import get_ticker, send_embed
+from .utils import get_ticker

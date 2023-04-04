@@ -39,5 +39,5 @@ def get_reddit_posts(ticker: str, num: int = 100) -> list[str]:
     return [html.unescape(post['data']['title']) for post in data]
 
 
-def get_social_media(ticker: str, start: str = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d")) -> list[str]:
+def get_social_media(ticker: str, start: str) -> list[str]:
     return get_tweets(ticker, start) + get_reddit_comments(ticker, start) #+ get_reddit_posts(ticker, start)

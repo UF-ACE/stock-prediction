@@ -16,7 +16,7 @@ def sentiment(options: list[dict]) -> Embedding:
     elif start < 1:
         start = 1
     
-    start = datetime.datetime.now() - datetime.timedelta(days=start)
+    start = (datetime.datetime.now() - datetime.timedelta(days=start)).strftime("%Y-%m-%d")
 
     # TODO: Split the following into two commands: one just for data, one for both data and analysis
 

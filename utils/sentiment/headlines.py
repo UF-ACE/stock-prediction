@@ -73,7 +73,7 @@ def get_yahoo(ticker: str, start: str) -> list[str]:
     return [x['title'] for x in yf_obj.news]
 
 
-def get_headlines(query: str, ticker: str, start: str = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d")) -> list[str]:
+def get_headlines(query: str, ticker: str, start: str) -> list[str]:
     headlines = set()
     headlines.update(get_finnhub(ticker, start))
     headlines.update(get_news_api(query, ticker, start))
