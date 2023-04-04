@@ -60,7 +60,7 @@ def get_google_news(query: str, ticker: str, start: str) -> list[str]:
 # Given a ticker, start, end dates -> return a list of news headlines from Finnhub API
 def get_finnhub(ticker: str, start: str) -> list[str]:
     # Submit the request to the Finnhub API
-    headlines = finnhub_client.company_news(ticker, _from=start)
+    headlines = finnhub_client.company_news(ticker, _from=start, to=datetime.datetime.now().strftime("%Y-%m-%d"))
 
     # Extract headlines and return
     headlines = [article['headline'] for article in headlines]
@@ -68,7 +68,7 @@ def get_finnhub(ticker: str, start: str) -> list[str]:
 
 
 # Given a ticker, start, end dates -> return a list of news headlines from Yahoo Finance API
-def get_yahoo(ticker: str, start: str, end: str) -> list[str]:
+def get_yahoo(ticker: str, start: str) -> list[str]:
     yf_obj = yf.Ticker(ticker)
     return [x['title'] for x in yf_obj.news]
 

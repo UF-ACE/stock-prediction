@@ -12,7 +12,8 @@ headers = {
 def main():
     with open("commands/sync/commands.json") as f:
         data = json.load(f)
-        requests.post(url, json=data, headers=headers).raise_for_status()
+        for x in data:
+            requests.post(url, json=x, headers=headers).raise_for_status()
 
     print("Successfully synced commands.")
 
