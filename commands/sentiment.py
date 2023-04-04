@@ -11,8 +11,8 @@ def sentiment(options: list[dict]) -> Embedding:
     query = args[0].get("value")
     start = 7 if len(args) == 1 else args[1].get("value")
 
-    if start > 365:
-        start = 365
+    if start > 30:
+        start = 30
     elif start < 1:
         start = 1
     

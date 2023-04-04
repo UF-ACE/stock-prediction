@@ -1,5 +1,5 @@
 class Embedding:
-    def __init__(self, title: str = "", description: str = "", url: str = "", color: int = "", fields: list = [], footer: dict = {}):
+    def __init__(self, title: str = "", description: str = "", url: str = "", color: int = "", fields: list[dict] = [], footer: dict = {}):
         self.title = title
         self.description = description
         self.url = url
@@ -30,7 +30,8 @@ class Embedding:
         self.color = color
     
     def add_field(self, name: str, value: str, inline: bool):
-        self.fields.append({"name": name, "value": value, "inline": inline})
+        # NEVER use append() here 
+        self.fields = self.fields + [{"name": name, "value": value, "inline": inline}]
     
     def set_footer(self, text: str, icon_url: str = "https://uf-ace.com/static/media/logo-min.1380c5e0.png"):
         self.footer = {"text": text, "icon_url": icon_url}

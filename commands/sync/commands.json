@@ -35,7 +35,7 @@
                     },
                     {
                         "name": "interval",
-                        "description": "Number of days in the range [1, 365]",
+                        "description": "Number of days in the range [1, 30]; defaults to 7",
                         "type": 4,
                         "required": false
                     }

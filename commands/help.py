@@ -21,7 +21,7 @@ def help(options: list[dict]) -> Embedding:
         embed.add_field("Parameters", 
                         "`type`: can be \"data\" or \"analyze\" to choose between (only) collecting data or running an analysis\n" \
                         "`company`: the company to analyze; can be a company name or ticker symbol\n" \
-                        "`interval`: the timespan (days into the past) to collect data from; must be in [1, 365]; default is 7 days\n", 
+                        "`interval`: the timespan (days into the past) to collect data from; must be in [1, 30]; default is 7 days\n", 
                         False)
         embed.add_field("Examples", 
                         "`/sentiment data Apple`\n" \
