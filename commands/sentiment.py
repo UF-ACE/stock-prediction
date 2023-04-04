@@ -4,10 +4,12 @@ from utils.discord import Embedding
 from utils.sentiment import get_headlines, get_social_media
 
 
-def sentiment(options: list[str]) -> dict:
+def sentiment(options: list[dict]) -> Embedding:
     # Parse the arguments
-    query = options[0].get("value")
-    start = options[1].get("value", 7)
+    sub_command = options[0]
+    args = sub_command.get("options")
+    query = args[0].get("value")
+    start = 7 if len(args) == 1 else args[1].get("value")
 
     if start > 365:
         start = 365
@@ -15,6 +17,8 @@ def sentiment(options: list[str]) -> dict:
         start = 1
     
     start = datetime.datetime.now() - datetime.timedelta(days=start)
+
+    # TODO: Split the following into two commands: one just for data, one for both data and analysis
 
     # Get the data
     ticker = get_ticker(query)

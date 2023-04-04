@@ -41,5 +41,3 @@ def get_reddit_posts(ticker: str, num: int = 100) -> list[str]:
 
 def get_social_media(ticker: str, start: str = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d")) -> list[str]:
     return get_tweets(ticker, start) + get_reddit_comments(ticker, start) #+ get_reddit_posts(ticker, start)
-
-print(get_social_media('AAPL', '2023-03-20'))
