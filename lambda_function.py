@@ -25,5 +25,3 @@ def lambda_handler(event, context):
     # Create an Interaction object and respond to the request
     inter = Interaction(event.get("body-json"))
     inter.respond()
-
-   

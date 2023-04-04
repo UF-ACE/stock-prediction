@@ -1,13 +1,25 @@
+import datetime
 from utils import get_ticker
 from utils.discord import Embedding
 from utils.sentiment import get_headlines, get_social_media
 
 
 def sentiment(options: list[str]) -> dict:
-    # Retrieve the data
+    # Parse the arguments
     query = options[0].get("value")
-    headlines = get_headlines(query)
-    social_media = get_social_media(query)
+    start = options[1].get("value", 7)
+
+    if start > 365:
+        start = 365
+    elif start < 1:
+        start = 1
+    
+    start = datetime.datetime.now() - datetime.timedelta(days=start)
+
+    # Get the data
+    ticker = get_ticker(query)
+    headlines = get_headlines(query, ticker)
+    social_media = get_social_media(ticker)
     data = headlines + social_media
 
     # TODO: Analyze the data
@@ -22,4 +34,6 @@ def sentiment(options: list[str]) -> dict:
     embed.add_field("Social Media", "This is a sample value.", False)
     embed.add_field("Results", "This is a sample value.", False)
     return embed
+
+
         

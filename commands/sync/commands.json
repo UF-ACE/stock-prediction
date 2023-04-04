@@ -1,0 +1,44 @@
+{
+    "name": "sentiment",
+    "description":  "Sentiment analysis",
+    "options": [
+        {
+            "name": "data",
+            "description": "Retrieve sentiment data",
+            "type": 2,
+            "options": [
+                {
+                    "name": "query",
+                    "description": "The company/ticker to query",
+                    "type": 3,
+                    "required": true
+                },
+                {
+                    "name": "interval",
+                    "description": "Number of days in the range [1, 365]",
+                    "type": 4,
+                    "required": false
+                }
+            ]
+        },
+        {
+            "name": "analyze",
+            "description": "Analyze sentiment data",
+            "type": 2,
+            "options": [
+                {
+                    "name": "query",
+                    "description": "The company/ticker to query",
+                    "type": 3,
+                    "required": true
+                },
+                {
+                    "name": "interval",
+                    "description": "Number of days in the range [1, 365]",
+                    "type": 4,
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

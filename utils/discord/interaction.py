@@ -7,9 +7,6 @@ from commands import sentiment, help
 APP_ID = os.environ.get("APP_ID")
 
 class Interaction:
-    ERROR = Embedding(":x: Error", "The request could not be completed at this time.\
-                      \nIf this issue persists, please submit an issue on [GitHub](https://github.com/UF-ACE/stock-prediction).", color=0xFF0000)
-    
     def __init__(self, interaction: dict):
         self.type = interaction.get("type")
         self.token = interaction.get("token")
@@ -22,7 +19,7 @@ class Interaction:
     def send_embed(self, embed: Embedding):
         if not embed.footer:
             embed.set_footer(f"Request completed in {round(time.time() - self.timestamp, 2)}s")
-        requests.patch(self.webhook_url, json={"embeds": [embed.to_dict()]})
+        requests.patch(self.webhook_url, json={"embeds": [embed.to_dict()]}).raise_for_status()
     
     def respond(self):
         # Pong response
@@ -48,5 +45,7 @@ class Interaction:
 
             except Exception as e:
                 # Send an error message
-                self.send_embed(self.ERROR)
+                embed = Embedding(":x:  Error", "The request could not be completed at this time.\
+                        \nIf this issue persists, please submit an issue on [GitHub](https://github.com/UF-ACE/stock-prediction).", color=0xFF0000)
+                self.send_embed(embed)
                 raise Exception(f"[ERROR] {e}")
