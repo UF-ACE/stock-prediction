@@ -19,8 +19,8 @@ jobs:
       - name: install python packages
         run: pip install -r requirements.txt
 
-    - name: execute py script
-      env:
-        APP_ID: ${{ secrets.APP_ID }}
-        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-      run: python commands/sync/command_sync.py
+      - name: execute py script
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: python commands/sync/command_sync.py
