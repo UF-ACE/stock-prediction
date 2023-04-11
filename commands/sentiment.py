@@ -49,7 +49,7 @@ def setup(registry: CommandRegistry):
             CommandArg.Choice("data"),
             CommandArg.Choice("analyze")
         ]),
-        CommandArg("company", "the company to analyze; can be a company name or ticker symbol", CommandArg.Types.STRING),
+        CommandArg("query", "the company to analyze; can be a company name or ticker symbol", CommandArg.Types.STRING),
         CommandArg("interval", "the timespan (days into the past) to collect data from; must be in [1, 30]; default is 7 days", CommandArg.Types.INTEGER, required=False)
     ])
 

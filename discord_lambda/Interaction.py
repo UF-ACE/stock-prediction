@@ -60,7 +60,7 @@ class Interaction:
     def __create_channel_message(self, content: str = None, embeds: list[Embedding] = None, ephemeral: bool = True) -> dict:
         response = {
             "content": content,
-            "embeds": [embeds.to_dict()] if embeds else None,
+            "embeds": [embed.to_dict() for embed in embeds] if embeds else None,
             "flags": 1 << 6 if ephemeral else None
         }
         return response
