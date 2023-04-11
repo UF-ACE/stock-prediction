@@ -4,7 +4,7 @@ from utils.sentiment import get_headlines, get_social_media
 from discord_lambda import Embedding, CommandRegistry, Interaction, CommandArg
 
 
-def sentiment(inter: Interaction, type: str, query: str, interval: int) -> None:
+def sentiment(inter: Interaction, type: str, query: str, interval: int = 7) -> None:
     # Parse the arguments
     if interval < 1:
         interval = 1
