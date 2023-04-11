@@ -4,14 +4,14 @@ from utils.sentiment import get_headlines, get_social_media
 from discord_lambda import Embedding, CommandRegistry, Interaction, CommandArg
 
 
-def sentiment(inter: Interaction, type: str, query: str, start: int) -> None:
+def sentiment(inter: Interaction, type: str, query: str, interval: int) -> None:
     # Parse the arguments
-    if start < 1:
-        start = 1
-    elif start > 30:
-        start = 30
+    if interval < 1:
+        interval = 1
+    elif interval > 30:
+        interval = 30
     
-    start = (datetime.datetime.now() - datetime.timedelta(days=start)).strftime("%Y-%m-%d")
+    start = (datetime.datetime.now() - datetime.timedelta(days=interval)).strftime("%Y-%m-%d")
 
     # TODO: Split the following into two commands: one just for data, one for both data and analysis
 
