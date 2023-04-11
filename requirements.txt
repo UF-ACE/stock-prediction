@@ -1,13 +1,7 @@
-# These are added to the Lambda function as a layer using the following steps:
-# 1. Create a virtual environment named "python" in the root of the project: python3.9 -m venv python
-# 2. Activate the virtual environment: source python/bin/activate
-# 3. Install the dependencies using Docker: sudo docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/; exit"
-# 4. Zip the contents of the virtual environment: zip -r ACEBot_deps.zip python/lib/python3.9/site-packages/
-
+pynacl==1.5.0
+requests==2.28.2
 GoogleNews==1.6.7
 setuptools==67.6.1
 git+https://github.com/jaARke/finnhub-python.git
 git+https://github.com/JustAnotherArchivist/snscrape.git
-pynacl==1.5.0
-requests==2.28.2
 yfinance==0.2.14
