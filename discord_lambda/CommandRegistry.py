@@ -112,10 +112,13 @@ class CommandRegistry:
             raise KeyError(f"Command '{d['name']}' not found!")
         
         func = cmd.get("func")
-        args = {option["name"]: option["value"] for option in d["options"]}
         try:
             assert callable(func)
         except AssertionError:
-            raise Exception(f"Function '{func.__name__}' is not callable!")
-
-        return func, args
+            raise AssertionError(f"Command '{d['name']}' is not callable!")
+        
+        # Check if any arguments were passed
+        if not d.get("options"):
+            return func, {}
+        else:
+            return func, {option["name"]: option["value"] for option in d["options"]}
