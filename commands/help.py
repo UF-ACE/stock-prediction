@@ -1,9 +1,9 @@
 from discord_lambda import Embedding, CommandRegistry, Interaction, CommandArg
 
-def help(inter: Interaction, module: str = None) -> None:
+def help(inter: Interaction, command: str = "help") -> None:
     embed = None
     # Send the help menu if requested
-    if not module or module == "help":
+    if not command == "help":
         embed = Embedding("ACE Stock Bot", "Use `/help <command>` to gain more information about that command :smiley:", color=0x00FF00)
         embed.add_field("Commands", 
                "`sentiment`\nPerforms sentiment data collection and analysis.\n",
@@ -14,7 +14,7 @@ def help(inter: Interaction, module: str = None) -> None:
                         False)
 
     # Check which command the user would like info on
-    elif module == "sentiment":
+    elif command == "sentiment":
         embed = Embedding("Sentiment Analysis", "Collects data, performs sentiment analysis on a company based on news and social media posts.", color=0x00FF00)
         embed.add_field("Usage", "`/sentiment <type> <company> <interval>`", False)
         embed.add_field("Parameters", 
@@ -32,7 +32,7 @@ def help(inter: Interaction, module: str = None) -> None:
 
 def setup(registry: CommandRegistry):
     registry.register_cmd(func=help, name="help", desc="Provides information on how to use the bot.", options=[
-        CommandArg("module", "the module to get help with", CommandArg.Types.STRING, required=False, choices=[
+        CommandArg("command", "the command to get help with", CommandArg.Types.STRING, required=False, choices=[
             CommandArg.Choice("help"),
             CommandArg.Choice("sentiment")
         ])
