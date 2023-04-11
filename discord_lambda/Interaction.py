@@ -67,8 +67,14 @@ class Interaction:
     
 
     def send_response(self, content: str = None, embeds: list[Embedding] = None, ephemeral: bool = True) -> None:
-        requests.patch(self.webhook_url, json=self.__create_channel_message(content, embeds, ephemeral)).raise_for_status()
+        try:
+            requests.patch(self.webhook_url, json=self.__create_channel_message(content, embeds, ephemeral)).raise_for_status()
+        except Exception as e:
+            raise Exception(f"Unable to send response: {e}")
     
 
     def send_followup(self, content: str = None, embeds: list[Embedding] = None, ephemeral: bool = True) -> None:
-        requests.post(self.webhook_url, json=self.__create_channel_message(content, embeds, ephemeral)).raise_for_status()
+        try:
+            requests.post(self.webhook_url, json=self.__create_channel_message(content, embeds, ephemeral)).raise_for_status()
+        except Exception as e:
+            raise Exception(f"Unable to send followup: {e}")
