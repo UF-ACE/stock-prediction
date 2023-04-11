@@ -3,7 +3,7 @@ from discord_lambda import Embedding, CommandRegistry, Interaction, CommandArg
 def help(inter: Interaction, command: str = "help") -> None:
     embed = None
     # Send the help menu if requested
-    if not command == "help":
+    if command == "help":
         embed = Embedding("ACE Stock Bot", "Use `/help <command>` to gain more information about that command :smiley:", color=0x00FF00)
         embed.add_field("Commands", 
                "`sentiment`\nPerforms sentiment data collection and analysis.\n",
