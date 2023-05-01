@@ -1,3 +1,0 @@
-[submodule "discord_lambda"]
-	path = discord_lambda
-	url = https://github.com/jaARke/discord-lambda-py
