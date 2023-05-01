@@ -41,4 +41,4 @@ class InteractionHandler:
                 func, args = self.registry.find_func(interaction.data)
                 func(interaction, **args)
             except Exception as e:
-                interaction.send_response(embeds=[Embedding("Error", f"The request could not be completed:\n`{e}`", color=0xFF0000)])
+                interaction.send_response(embeds=[Embedding(":x: Error", f"The request could not be completed:\n`{e}`", color=0xFF0000)])
