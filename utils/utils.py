@@ -1,4 +1,6 @@
 import requests
+import time
+from discord_lambda import Embedding
 
 
 # Given a company name, return the corresponding ticker
@@ -12,3 +14,8 @@ def get_ticker(query: str) -> str:
         return data['quotes'][0]['symbol']
     except Exception as e:
         raise Exception("Invalid company name.")
+ 
+
+# Add the generic footer to the embed
+def add_footer(timestamp: float, embed: Embedding) -> None:
+    embed.set_footer(text=f"Request completed in {time.time() - timestamp}s", icon_url="https://uf-ace.com/static/media/logo-min.1380c5e0.png")

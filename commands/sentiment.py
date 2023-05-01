@@ -1,5 +1,5 @@
 import datetime
-from utils import get_ticker
+from utils import get_ticker, add_footer
 from utils.sentiment import get_headlines, get_social_media
 from discord_lambda import Embedding, CommandRegistry, Interaction, CommandArg
 
@@ -22,6 +22,7 @@ def sentiment(inter: Interaction, type: str, query: str, interval: int = 7) -> N
 
     # Create the embed
     embed = Embedding(f"Sentiment Analysis for \'{query}\' ({get_ticker(query)})", f"Analysis based on {len(headlines)} headlines and {len(social_media)} social media posts.", color=0x00FF00)
+    add_footer(inter.timestamp, embed)
     embed.add_field("Headlines", "This is a sample value.", False)
     embed.add_field("Social Media", "This is a sample value.", False)
 

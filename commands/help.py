@@ -1,4 +1,5 @@
 from discord_lambda import Embedding, CommandRegistry, Interaction, CommandArg
+from utils import add_footer
 
 def help(inter: Interaction, command: str = "help") -> None:
     embed = None
@@ -26,7 +27,8 @@ def help(inter: Interaction, command: str = "help") -> None:
                         "`/sentiment data Apple`\n" \
                         "`/sentiment analyze AAPL 30`\n",
                          False)
-        
+    
+    add_footer(inter.timestamp, embed)
     inter.send_response(embeds=[embed])
 
 
