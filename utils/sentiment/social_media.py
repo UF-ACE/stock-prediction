@@ -27,17 +27,22 @@ def get_reddit_comments(ticker: str, start: str, num: int = 100) -> list[str]:
     return [html.unescape(comment['body']) for comment in data['data']]
 
 
-def get_reddit_posts(ticker: str, num: int = 100) -> list[str]:
-    '''TODO: Tweak this to pull relevant posts from Reddit -> pulls a lot of irrelevant posts (ads) right now'''
+def get_reddit_posts(ticker: str, start: str, num: int = 100) -> list[str]:
+    # Convert the start date to epoch time
+    epoch = int(time.mktime(datetime.datetime.strptime(start, "%Y-%m-%d").timetuple()))
 
     # Send the request to the Reddit API
-    posts_url = f'https://www.reddit.com/search.json?q={ticker}&t=week&limit={num}&sort=top&'
+    posts_url = f'https://www.reddit.com/search.json?q={ticker}+title:{ticker}&after={epoch}&limit={num}&sort=score&restrict_sr=1'
     response = requests.get(posts_url, headers={'User-agent' :'Mozilla/5.0 (Macintosh; PPC Mac OS X 10_8_7 rv:5.0; en-US) AppleWebKit/533.31.5 (KHTML, like Gecko) Version/4.0 Safari/533.31.5'})
     data = (response.json())['data']['children']
 
     # Extract the posts and return
-    return [html.unescape(post['data']['title']) for post in data]
+    return [html.unescape(post['data']['title']) for post in data if 
+            (post['data']['title'].lower().find("free trial") == -1 and
+              post['data']['title'].lower().find("webull") == -1 and
+                post['data']['title'].lower().find("refer") == -1
+            )]
 
 
 def get_social_media(ticker: str, start: str) -> list[str]:
-    return get_tweets(ticker, start) + get_reddit_comments(ticker, start) #+ get_reddit_posts(ticker, start)
+    return get_reddit_comments(ticker, start) + get_reddit_posts(ticker, start) # + get_tweets(ticker, start)

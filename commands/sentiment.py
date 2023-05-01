@@ -25,7 +25,7 @@ def sentiment(inter: Interaction, type: str, query: str, interval: int = 7) -> N
     embed.add_field("Headlines", "This is a sample value.", False)
     embed.add_field("Social Media", "This is a sample value.", False)
 
-    if type == "data":
+    if type == "collect":
         inter.send_response(embeds=[embed])
         return
     
@@ -44,13 +44,13 @@ def sentiment(inter: Interaction, type: str, query: str, interval: int = 7) -> N
 
 
 def setup(registry: CommandRegistry):
-    registry.register_cmd(func=sentiment, name="sentiment", desc="Collects data, performs sentiment analysis on a company based on news and social media posts.", options=[
-        CommandArg("type", "can be \"data\" or \"analyze\" to choose between (only) collecting data or running an analysis", CommandArg.Types.STRING, choices=[
-            CommandArg.Choice("data"),
+    registry.register_cmd(func=sentiment, name="sentiment", desc="Collect, analyze sentiment data", options=[
+        CommandArg("type", "\"collect\" or \"analyze\"", CommandArg.Types.STRING, choices=[
+            CommandArg.Choice("collect"),
             CommandArg.Choice("analyze")
         ]),
-        CommandArg("query", "the company to analyze; can be a company name or ticker symbol", CommandArg.Types.STRING),
-        CommandArg("interval", "the timespan (days into the past) to collect data from; must be in [1, 30]; default is 7 days", CommandArg.Types.INTEGER, required=False)
+        CommandArg("query", "Company name or ticker", CommandArg.Types.STRING),
+        CommandArg("interval", "Timespan in [1, 30] days; default = 7", CommandArg.Types.INTEGER, required=False)
     ])
 
 
