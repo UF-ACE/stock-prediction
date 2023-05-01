@@ -2,7 +2,7 @@ name: Deploy to Lambda
 
 on:
   push:
-    branches: [ main, lambda-migration ]
+    branches: [ main ]
 
 jobs:
   upload_deps:
