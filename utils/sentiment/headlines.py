@@ -1,29 +1,26 @@
 import requests
-from dotenv import load_dotenv, find_dotenv
 import os
 import finnhub
 import datetime
 from GoogleNews import GoogleNews
-from utils import get_ticker
+import yfinance as yf
 
-load_dotenv(find_dotenv())
-NEWS_API_KEY = os.getenv('NEWS_API_KEY')
-FINNHUB_API_KEY = os.getenv('FINNHUB_API_KEY')
+NEWS_API_KEY = os.environ.get('NEWS_API_KEY')
+FINNHUB_API_KEY = os.environ.get('FINNHUB_API_KEY')
 news_api_endpoint = "https://newsapi.org/v2/everything/"
 finnhub_client = finnhub.Client(api_key=FINNHUB_API_KEY)
 
 
 # Given a company name, start, end dates -> return a list of news headlines from News API
-def get_news_api(query: str, start: str, end: str) -> list[str]:
+def get_news_api(query: str, ticker: str, start: str) -> list[str]:
     # Search for the company name and its ticker
     headlines = []
-    for query in [query, get_ticker(query)]:
+    for query in [query, ticker]:
         # Construct the request parameters
         request_params = {
             'q': query,
             'language': 'en',
             'from': start,
-            'to': end,
             'searchIn': 'title',
             'apiKey': NEWS_API_KEY,
             'sortBy': 'relevancy',
@@ -42,36 +39,44 @@ def get_news_api(query: str, start: str, end: str) -> list[str]:
 
 
 # Given a company name, start, end dates -> return a list of news headlines from Google News API
-def get_google_news(query: str, start: str, end: str) -> list[str]:
+def get_google_news(query: str, ticker: str, start: str) -> list[str]:
+    '''TODO: Make this work on Lambda environment -> currently causes timeout'''
     headlines = []
     # Create the GoogleNews object
-    googlenews = GoogleNews(start=start, end=end, lang='en', region='US')
+    googlenews = GoogleNews(start=start, end=datetime.datetime.now().strftime("%m-%d-%Y"), lang='en', region='US')
 
     # Search for the common name
     googlenews.search(query)
-    headlines += [googlenews.result()[x]['title'] for x in range(len(googlenews.result()))]
+    headlines += [x['title'] for x in googlenews.result()]
 
     # Clear the object and search for the ticker
     googlenews.clear()
-    googlenews.search(get_ticker(query))
+    googlenews.search(ticker)
     headlines += [googlenews.result()[x]['title'] for x in range(len(googlenews.result()))]
     
     return headlines
     
 
 # Given a ticker, start, end dates -> return a list of news headlines from Finnhub API
-def get_finnhub(query: str, start: str, end: str) -> list[str]:
+def get_finnhub(ticker: str, start: str) -> list[str]:
     # Submit the request to the Finnhub API
-    headlines = finnhub_client.company_news(get_ticker(query), _from=start, to=end)
+    headlines = finnhub_client.company_news(ticker, _from=start, to=datetime.datetime.now().strftime("%Y-%m-%d"))
 
     # Extract headlines and return
     headlines = [article['headline'] for article in headlines]
     return headlines
 
 
-def get_headlines(query: str, start: str = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d"), end: str = datetime.datetime.now().strftime("%Y-%m-%d")) -> list[str]:
+# Given a ticker, start, end dates -> return a list of news headlines from Yahoo Finance API
+def get_yahoo(ticker: str, start: str) -> list[str]:
+    yf_obj = yf.Ticker(ticker)
+    return [x['title'] for x in yf_obj.news]
+
+
+def get_headlines(query: str, ticker: str, start: str) -> list[str]:
     headlines = set()
-    headlines.update(get_finnhub(query, start, end))
-    headlines.update(get_news_api(query, start, end))
-    headlines.update(get_google_news(query, datetime.datetime.strptime(start, "%Y-%m-%d").strftime("%m-%d-%Y"), datetime.datetime.strptime(end, "%Y-%m-%d").strftime("%m-%d-%Y")))
+    headlines.update(get_finnhub(ticker, start))
+    headlines.update(get_news_api(query, ticker, start))
+    #headlines.update(get_google_news(query, ticker, datetime.datetime.strptime(start, "%Y-%m-%d").strftime("%m-%d-%Y")))
+    headlines.update(get_yahoo(ticker, start))
     return list(headlines)

@@ -2,4 +2,5 @@
 .env
 __pycache__
 .DS_Store
-src
+/python
+*.zip
