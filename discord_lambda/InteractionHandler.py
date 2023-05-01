@@ -1,5 +1,5 @@
 from .CommandRegistry import CommandRegistry
-from .Interaction import Interaction
+from .Interaction import Interaction, Embedding
 from nacl.signing import VerifyKey
 import requests
 
@@ -37,11 +37,8 @@ class InteractionHandler:
             requests.post(interaction.callback_url, json={"type": 5, "data": {"flags": 1 << 6}})
 
             # Handle command
-            func, args = self.registry.find_func(interaction.data)
-            func(interaction, **args)
-
-
-            
-            
-        
-
+            try:
+                func, args = self.registry.find_func(interaction.data)
+                func(interaction, **args)
+            except Exception as e:
+                interaction.send_response(embeds=[Embedding("Error", f"The request could not be completed:\n`{e}`", color=0xFF0000)])
