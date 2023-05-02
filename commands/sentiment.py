@@ -8,12 +8,14 @@ def collect_helper(embed: Embedding, headlines: list[dict], social_media: list[d
     # Add sample headlines
     headlines_samples = ""
     for i, headline in enumerate(headlines[:5]):
+        headline['title'].replace("\n", " ")
         headlines_samples += f"{i+1}. [{headline['title']}]({headline['link']})\n"
     embed.add_field("News Headlines", headlines_samples, True)
 
     # Add sample social media posts
     social_media_samples = ""
     for i, post in enumerate(social_media[:5]):
+        post['title'] = post['title'].replace("\n", " ")
         social_media_samples += f"{i+1}. [{post['title']}]({post['link']})\n"
     embed.add_field("Social Media Posts", social_media_samples, True)
 
@@ -24,12 +26,13 @@ def analyze_helper(embed: Embedding, headlines: list[dict], social_media: list[d
     social_media_avg = analyze_data(social_media)
 
     # Sort the data
-    headlines = sorted(headlines, key=lambda x: abs(x['score']))
-    social_media = sorted(social_media, key=lambda x: abs(x['score']))
+    headlines = sorted(headlines, key=lambda x: abs(x['score']), reverse=True)
+    social_media = sorted(social_media, key=lambda x: abs(x['score']), reverse=True)
 
     # Add headline samples and results
     headlines_samples = ""
     for i, headline in enumerate(headlines[:5]):
+        headline['title'] = headline['title'].replace("\n", " ")
         headlines_samples += f"{i+1}. [{headline['title']}]({headline['link']})\n"
 
     headlines_sentiment = ""
@@ -44,11 +47,12 @@ def analyze_helper(embed: Embedding, headlines: list[dict], social_media: list[d
     # Add social media samples and results
     social_media_samples = ""
     for i, post in enumerate(social_media[:5]):
+        post['title'] = post['title'].replace("\n", " ")
         social_media_samples += f"{i+1}. [{post['title']}]({post['link']})\n"
     
     social_media_sentiment = ""
     for i, post in enumerate(social_media[:5]):
-        social_media_sentiment += f"{round(post['score'], 2)} - {post['sentiment']}\n"
+        social_media_sentiment += f"{i+1}. {round(post['score'], 2)} - {post['sentiment']}\n"
     social_media_sentiment += f"**Average:** {round(social_media_avg, 2)}"
 
     embed.add_field("Social Media Posts", social_media_samples, True)
