@@ -6,13 +6,13 @@ from discord_lambda import Embedding, CommandRegistry, Interaction, CommandArg
 def collect_helper(embed: Embedding, headlines: list[dict], social_media: list[dict]) -> None:
     # Add sample headlines
     headlines_samples = ""
-    for i, headline in enumerate(headlines) and i < 5:
+    for i, headline in enumerate(headlines[:5]):
         headlines_samples += f"{i+1}. [{headline['title']}]({headline['link']})\n"
     embed.add_field("Headlines", headlines_samples, True)
 
     # Add sample social media posts
     social_media_samples = ""
-    for i, post in enumerate(social_media) and i < 5:
+    for i, post in enumerate(social_media[:5]):
         social_media_samples += f"{i+1}. [{post['title']}]({post['link']})\n"
     embed.add_field("Social Media", social_media_samples, True)
 
@@ -24,11 +24,11 @@ def analyze_helper(embed: Embedding, headlines: list[dict], social_media: list[d
 
     # Add headline samples and results
     headlines_samples = ""
-    for i, headline in enumerate(headlines) and i < 5:
+    for i, headline in enumerate(headlines[:5]):
         headlines_samples += f"{i+1}. [{headline['title']}]({headline['link']})\n"
 
     headlines_sentiment = ""
-    for i, headline in enumerate(headlines) and i < 5:
+    for i, headline in enumerate(headlines[:5]):
         headlines_sentiment += f"{headline['score']} - {headline['sentiment']}\n"
     headlines_sentiment += f"**Average:** {headlines_avg}"
 
@@ -37,11 +37,11 @@ def analyze_helper(embed: Embedding, headlines: list[dict], social_media: list[d
 
     # Add social media samples and results
     social_media_samples = ""
-    for i, post in enumerate(social_media) and i < 5:
+    for i, post in enumerate(social_media[:5]):
         social_media_samples += f"{i+1}. [{post['title']}]({post['link']})\n"
     
     social_media_sentiment = ""
-    for i, post in enumerate(social_media) and i < 5:
+    for i, post in enumerate(social_media[:5]):
         social_media_sentiment += f"{post['score']} - {post['sentiment']}\n"
     social_media_sentiment += f"**Average:** {social_media_avg}"
 
