@@ -1,6 +1,8 @@
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
+nltk.data.path.append("/tmp")
+nltk.download("vader_lexicon", download_dir="/tmp")
 analyzer = SentimentIntensityAnalyzer()
 
 
