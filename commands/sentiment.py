@@ -23,6 +23,10 @@ def analyze_helper(embed: Embedding, headlines: list[dict], social_media: list[d
     headlines_avg = analyze_data(headlines)
     social_media_avg = analyze_data(social_media)
 
+    # Sort the data
+    headlines = sorted(headlines, key=lambda x: abs(x['score']))
+    social_media = sorted(social_media, key=lambda x: abs(x['score']))
+
     # Add headline samples and results
     headlines_samples = ""
     for i, headline in enumerate(headlines[:5]):
@@ -64,8 +68,6 @@ def sentiment(inter: Interaction, type: str, query: str, interval: int = 7) -> N
     ticker = get_ticker(query)
     headlines = get_headlines(query, ticker, start)
     social_media = get_social_media(ticker, start)
-    headlines = sorted(headlines, key=lambda x: abs(x['score']))
-    social_media = sorted(social_media, key=lambda x: abs(x['score']))
 
     # Create the embed
     embed = Embedding(f"Sentiment Analysis for \'{query}\' ({get_ticker(query)})",
