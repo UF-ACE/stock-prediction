@@ -1,7 +1,52 @@
 import datetime
 from utils import get_ticker, add_footer
-from utils.sentiment import get_headlines, get_social_media
+from utils.sentiment import get_headlines, get_social_media, analyze_data
 from discord_lambda import Embedding, CommandRegistry, Interaction, CommandArg
+
+def collect_helper(embed: Embedding, headlines: list[dict], social_media: list[dict]) -> None:
+    # Add sample headlines
+    headlines_samples = ""
+    for i, headline in enumerate(headlines) and i < 5:
+        headlines_samples += f"{i+1}. [{headline['title']}]({headline['link']})\n"
+    embed.add_field("Headlines", headlines_samples, True)
+
+    # Add sample social media posts
+    social_media_samples = ""
+    for i, post in enumerate(social_media) and i < 5:
+        social_media_samples += f"{i+1}. [{post['title']}]({post['link']})\n"
+    embed.add_field("Social Media", social_media_samples, True)
+
+
+def analyze_helper(embed: Embedding, headlines: list[dict], social_media: list[dict]) -> None:
+    # Run the analysis
+    headlines_avg = analyze_data(headlines)
+    social_media_avg = analyze_data(social_media)
+
+    # Add headline samples and results
+    headlines_samples = ""
+    for i, headline in enumerate(headlines) and i < 5:
+        headlines_samples += f"{i+1}. [{headline['title']}]({headline['link']})\n"
+
+    headlines_sentiment = ""
+    for i, headline in enumerate(headlines) and i < 5:
+        headlines_sentiment += f"{headline['score']} - {headline['sentiment']}\n"
+    headlines_sentiment += f"**Average:** {headlines_avg}"
+
+    embed.add_field("News Headlines", headlines_samples, True)
+    embed.add_field("Sentiment", headlines_sentiment, True)
+
+    # Add social media samples and results
+    social_media_samples = ""
+    for i, post in enumerate(social_media) and i < 5:
+        social_media_samples += f"{i+1}. [{post['title']}]({post['link']})\n"
+    
+    social_media_sentiment = ""
+    for i, post in enumerate(social_media) and i < 5:
+        social_media_sentiment += f"{post['score']} - {post['sentiment']}\n"
+    social_media_sentiment += f"**Average:** {social_media_avg}"
+
+    embed.add_field("Social Media Posts", social_media_samples, True)
+    embed.add_field("Sentiment", social_media_sentiment, True)
 
 
 def sentiment(inter: Interaction, type: str, query: str, interval: int = 7) -> None:
@@ -13,34 +58,30 @@ def sentiment(inter: Interaction, type: str, query: str, interval: int = 7) -> N
     
     start = (datetime.datetime.now() - datetime.timedelta(days=interval)).strftime("%Y-%m-%d")
 
-    # TODO: Split the following into two commands: one just for data, one for both data and analysis
-
     # Get the data
     ticker = get_ticker(query)
     headlines = get_headlines(query, ticker, start)
     social_media = get_social_media(ticker, start)
 
     # Create the embed
-    embed = Embedding(f"Sentiment Analysis for \'{query}\' ({get_ticker(query)})", f"Analysis based on {len(headlines)} headlines and {len(social_media)} social media posts.", color=0x00FF00)
-    add_footer(inter.timestamp, embed)
-    embed.add_field("Headlines", "This is a sample value.", False)
-    embed.add_field("Social Media", "This is a sample value.", False)
+    embed = Embedding(f"Sentiment Analysis for \'{query}\' ({get_ticker(query)})",
+                       f"Found {len(headlines)} headlines and {len(social_media)} social media posts." + 
+                       (" Higher sentiment scores indicate more positive sentiment." if type == "analyze" else ""),
+                         color=0x00FF00)
 
+    # Add the appropriate fields
     if type == "collect":
-        inter.send_response(embeds=[embed])
-        return
-    
-    data = headlines + social_media
+        collect_helper(embed, headlines, social_media)
+    else:
+        analyze_helper(embed, headlines, social_media)
 
-    # TODO: Analyze the data
+    # Add a warning if the sample size is small
+    if (len(headlines) + len(social_media)) < 25:
+        embed.add_field(":warning:  Warning", "*The sample size for this query is small. Consider using a more popular company or a larger timespan.*")
+        embed.set_color(0xFF8000)
 
-    # TODO: Add sample headlines + posts to the embed
-    # TODO: Add the results to the embed
-    # TODO: Add warning if there is not enough data
-
-    # Send the embed -> TODO: fill out the embed
-   
-    embed.add_field("Results", "This is a sample value.", False)
+    # Add the footer and send the response
+    add_footer(inter.timestamp, embed)
     inter.send_response(embeds=[embed])
 
 

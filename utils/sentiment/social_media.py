@@ -14,7 +14,7 @@ def get_tweets(ticker: str, start: str, num: int = 100) -> list[str]:
     return tweets
 
 
-def get_reddit_comments(ticker: str, start: str, num: int = 100) -> list[str]:
+def get_reddit_comments(ticker: str, start: str, num: int = 100) -> list[dict]:
     # Convert the start date to epoch time
     epoch = int(time.mktime(datetime.datetime.strptime(start, "%Y-%m-%d").timetuple()))
 
@@ -24,10 +24,10 @@ def get_reddit_comments(ticker: str, start: str, num: int = 100) -> list[str]:
     data = response.json()
 
     # Extract the comments and return
-    return [html.unescape(comment['body']) for comment in data['data']]
+    return [{"title": html.unescape(comment['body']), "link": "https://reddit.com" + comment['permalink']} for comment in data['data']]
 
 
-def get_reddit_posts(ticker: str, start: str, num: int = 100) -> list[str]:
+def get_reddit_posts(ticker: str, start: str, num: int = 100) -> list[dict]:
     # Convert the start date to epoch time
     epoch = int(time.mktime(datetime.datetime.strptime(start, "%Y-%m-%d").timetuple()))
 
@@ -37,12 +37,12 @@ def get_reddit_posts(ticker: str, start: str, num: int = 100) -> list[str]:
     data = (response.json())['data']['children']
 
     # Extract the posts and return
-    return [html.unescape(post['data']['title']) for post in data if 
+    return [{"title": html.unescape(post['data']['title']), "link": html.unescape(post['data']['url'])} for post in data if 
             (post['data']['title'].lower().find("free trial") == -1 and
               post['data']['title'].lower().find("webull") == -1 and
                 post['data']['title'].lower().find("refer") == -1
             )]
 
 
-def get_social_media(ticker: str, start: str) -> list[str]:
+def get_social_media(ticker: str, start: str) -> list[dict]:
     return get_reddit_comments(ticker, start) + get_reddit_posts(ticker, start) # + get_tweets(ticker, start)
