@@ -1,7 +1,6 @@
 import requests
 import time
 
-
 class Embedding:
     def __init__(self, title: str = "", desc: str = "", url: str = "", color: int = "", fields: list[dict] = [], footer: dict = {}):
         self.title = title
