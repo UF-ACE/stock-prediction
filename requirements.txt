@@ -3,7 +3,6 @@ requests==2.28.2
 GoogleNews==1.6.7
 setuptools==67.6.1
 git+https://github.com/jaARke/finnhub-python.git
-git+https://github.com/JustAnotherArchivist/snscrape.git
 yfinance==0.2.14
 nltk==3.8.1
 newsapi-python==0.2.7

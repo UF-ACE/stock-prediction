@@ -68,6 +68,8 @@ jobs:
             ! -path "*/.github/workflows/*" \
             ! -name ".gitignore" \
             ! -name "README.md" \
+            ! -name "LICENSE" \
+            ! -name "requirements.txt" \
             -type f \
             -print)"
           for _file in ${_files}; do
