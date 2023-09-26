@@ -5,3 +5,4 @@ handler = InteractionHandler(command_dir="commands", app_id=os.environ.get("APP_
 
 def lambda_handler(event, context):
     handler.handle(event)
+
