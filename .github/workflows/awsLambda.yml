@@ -2,10 +2,11 @@ name: Deploy to Lambda
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, sentiment-analysis ]
 
 jobs:
   upload_deps:
+    if: github.repository != 'jaARke/discord-lambda-py'
     name: Upload Layer to AWS Lambda
     runs-on: ubuntu-latest
 
@@ -53,6 +54,7 @@ jobs:
           aws lambda update-function-configuration --function-name ACEBot_handler --layers $layer_arn
   
   upload_source:
+    if: github.repository != 'jaARke/discord-lambda-py'
     name: Upload Source to AWS Lambda
     runs-on: ubuntu-latest
 
