@@ -67,7 +67,6 @@ jobs:
           git -C "${THIS_REPO}" diff
       
       - name: Commit changes, if any
-        if: steps.verify_diff.outputs.changed == 'true'
         run: |
           git -C ${THIS_REPO} config user.name "${GIT_AUTHOR_NAME}"
           git -C ${THIS_REPO} config \
