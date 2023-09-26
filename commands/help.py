@@ -10,7 +10,7 @@ def help(inter: Interaction, command: str = "help") -> None:
                "`sentiment`\nPerforms sentiment data collection and analysis.\n",
                 False)
         embed.add_field("About", 
-                        "This bot is developed by UF ACE.\n" \
+                        "This bot was developed by UF ACE.\n" \
                         "Please visit the [GitHub](https://github.com/UF-ACE/stock-prediction) to submit ideas or bugs.\n",
                         False)
 
