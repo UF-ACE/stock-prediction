@@ -1,33 +1,24 @@
 import datetime
 from utils import get_ticker, add_footer
-from utils.sentiment import get_headlines, get_social_media, analyze_data
+from utils.sentiment import get_headlines, analyze_data
 from discord_lambda import Embedding, CommandRegistry, Interaction, CommandArg
 
 
-def collect_helper(embed: Embedding, headlines: list[dict], social_media: list[dict]) -> None:
+def collect_helper(embed: Embedding, headlines: list[dict]) -> None:
     # Add sample headlines
     headlines_samples = ""
     for i, headline in enumerate(headlines[:5]):
         headline['title'].replace("\n", " ")
         headlines_samples += f"{i+1}. [{headline['title']}]({headline['link']})\n"
-    embed.add_field("News Headlines", headlines_samples, True)
-
-    # Add sample social media posts
-    social_media_samples = ""
-    for i, post in enumerate(social_media[:5]):
-        post['title'] = post['title'].replace("\n", " ")
-        social_media_samples += f"{i+1}. [{post['title']}]({post['link']})\n"
-    embed.add_field("Social Media Posts", social_media_samples, True)
+    embed.add_field("News Headlines", headlines_samples, False)
 
 
-def analyze_helper(embed: Embedding, headlines: list[dict], social_media: list[dict]) -> None:
+def analyze_helper(embed: Embedding, headlines: list[dict]) -> None:
     # Run the analysis
     headlines_avg = analyze_data(headlines)
-    social_media_avg = analyze_data(social_media)
 
     # Sort the data
     headlines = sorted(headlines, key=lambda x: abs(x['score']), reverse=True)
-    social_media = sorted(social_media, key=lambda x: abs(x['score']), reverse=True)
 
     # Add headline samples and results
     headlines_samples = ""
@@ -44,20 +35,6 @@ def analyze_helper(embed: Embedding, headlines: list[dict], social_media: list[d
     embed.add_field("Sentiment", headlines_sentiment, True)
     embed.add_field("", "", False)
 
-    # Add social media samples and results
-    social_media_samples = ""
-    for i, post in enumerate(social_media[:5]):
-        post['title'] = post['title'].replace("\n", " ")
-        social_media_samples += f"{i+1}. [{post['title']}]({post['link']})\n"
-    
-    social_media_sentiment = ""
-    for i, post in enumerate(social_media[:5]):
-        social_media_sentiment += f"{i+1}. {round(post['score'], 2)} - {post['sentiment']}\n"
-    social_media_sentiment += f"**Average:** {round(social_media_avg, 2)}"
-
-    embed.add_field("Social Media Posts", social_media_samples, True)
-    embed.add_field("Sentiment", social_media_sentiment, True)
-
 
 def sentiment(inter: Interaction, type: str, query: str, interval: int = 7) -> None:
     # Parse the arguments
@@ -71,22 +48,21 @@ def sentiment(inter: Interaction, type: str, query: str, interval: int = 7) -> N
     # Get the data
     ticker = get_ticker(query)
     headlines = get_headlines(query, ticker, start)
-    social_media = get_social_media(ticker, start)
 
     # Create the embed
     embed = Embedding(f"Sentiment Analysis for \'{query}\' ({get_ticker(query)})",
-                       f"Found {len(headlines)} headlines and {len(social_media)} social media posts." + 
+                       f"Found {len(headlines)} headlines." + 
                        (" Higher sentiment scores indicate more positive sentiment." if type == "analyze" else ""),
                          color=0x00FF00)
 
     # Add the appropriate fields
     if type == "collect":
-        collect_helper(embed, headlines, social_media)
+        collect_helper(embed, headlines)
     else:
-        analyze_helper(embed, headlines, social_media)
+        analyze_helper(embed, headlines)
 
     # Add a warning if the sample size is small
-    if (len(headlines) + len(social_media)) < 25:
+    if (len(headlines)) < 25:
         embed.add_field(":warning:  Warning", "*The sample size for this query is small. Consider using a more popular company or a larger timespan.*")
         embed.set_color(0xFF8000)
 
@@ -104,6 +80,3 @@ def setup(registry: CommandRegistry):
         CommandArg("query", "Company name or ticker", CommandArg.Types.STRING),
         CommandArg("interval", "Timespan in [1, 30] days; default = 7", CommandArg.Types.INTEGER, required=False)
     ])
-
-
-        
