@@ -70,6 +70,8 @@ jobs:
             ! -name "README.md" \
             ! -name "LICENSE" \
             ! -name "requirements.txt" \
+            ! -name "test_command.py" \
+            ! -name ".env_sample" \
             -type f \
             -print)"
           for _file in ${_files}; do
