@@ -83,9 +83,14 @@ jobs:
             cp "${_src}" "${_dst}"
           done
           git -C "${THIS_REPO}" diff
-
+      - name: Check if there are any changes
+        id: verify_diff
+        run: |
+          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+      
       # Commit changes, if there are any
       - name: Commit changes, if any
+        if: steps.verify_diff.outputs.changed == 'true'
         run: |
           git -C ${THIS_REPO} config user.name "${GIT_AUTHOR_NAME}"
           git -C ${THIS_REPO} config \
