@@ -67,4 +67,8 @@ def get_headlines(query: str, ticker: str, start: str) -> list[dict]:
     headlines += get_news_api(query, ticker, start)
     headlines += get_google_news(query, ticker, datetime.datetime.strptime(start, "%Y-%m-%d").strftime("%m-%d-%Y"))
     headlines += get_yahoo(ticker, start)
+
+    # Remove headlines which have duplicate titles
+    headlines = [dict(t) for t in {tuple(d.items()) for d in headlines}]
+
     return headlines

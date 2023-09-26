@@ -63,8 +63,10 @@ def sentiment(inter: Interaction, type: str, query: str, interval: int = 7) -> N
 
     # Add a warning if the sample size is small
     if (len(headlines)) < 25:
-        embed.add_field(":warning:  Warning", "*The sample size for this query is small. Consider using a more popular company or a larger timespan.*")
+        embed.add_field(":warning:  Warning", "*The sample size for this query is small. Consider using a more popular company or a larger timespan.*", False)
         embed.set_color(0xFF8000)
+
+    # TODO: Add option to download the data as a CSV file
 
     # Add the footer and send the response
     add_footer(inter.timestamp, embed)
