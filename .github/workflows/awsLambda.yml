@@ -32,6 +32,7 @@ jobs:
           release_bucket_uri: s3://acestockbot
           release_id: deps.zip
           release_layer: ACEBot_Dependencies
+          function_name: ACEBot_handler
         run: |
           mkdir -p python/lib/python3.9/site-packages
           docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/; exit"
@@ -51,7 +52,7 @@ jobs:
           layer_arn=$(aws lambda list-layer-versions --layer-name $release_layer --query 'LayerVersions[0].LayerVersionArn' --output text)
 
           # Update the lambda function to use the new layer
-          aws lambda update-function-configuration --function-name ACEBot_handler --layers $layer_arn
+          aws lambda update-function-configuration --function-name $function_name --layers $layer_arn
   
   upload_source:
     if: github.repository != 'jaARke/discord-lambda-py'
@@ -75,7 +76,3 @@ jobs:
           aws_region: us-east-2
           function_name: ACEBot_handler
           zip_file: bundle.zip
-      
-
-      
-
