@@ -39,7 +39,8 @@ jobs:
         run: |
           # Package up the dependencies
           mkdir -p python/lib/python3.9/site-packages
-          docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/ && PYTHONPATH=python/lib/python3.9/site-packages python -m InteractionHandlerPickler.py; exit"
+          docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/ \
+          && PYTHONPATH=python/lib/python3.9/site-packages APP_ID=$APP_ID PUBLIC_KEY=$PUBLIC_KEY BOT_TOKEN=$BOT_TOKEN python -m InteractionHandlerPickler.py; exit"
           zip --quiet -r $release_id python InteractionHandler.pickle
 
           echo "Uploading $release_id to $release_bucket_uri"
