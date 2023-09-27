@@ -40,11 +40,9 @@ jobs:
           # Package up the dependencies
           mkdir -p python/lib/python3.9/site-packages
           docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/; exit"
-          zip --quiet -r $release_id python
-
-          # Package up the InteractionHandler
+          pip install requests
           python InteractionHandlerPickler.py
-          zip --quiet -r $release_id InteractionHandler.pickle
+          zip --quiet -r $release_id python InteractionHandler.pickle
 
           echo "Uploading $release_id to $release_bucket_uri"
           aws s3 cp $release_id $release_bucket_uri
