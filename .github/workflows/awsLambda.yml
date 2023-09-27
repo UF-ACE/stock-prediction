@@ -33,7 +33,7 @@ jobs:
           release_id: deps.zip
           release_layer: ACEBot_Dependencies
           function_name: ACEBot_handler
-          APP_ID: ${{ secrets.APP_ID}}
+          APP_ID: ${{ secrets.APP_ID }}
           PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
