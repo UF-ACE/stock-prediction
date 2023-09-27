@@ -26,18 +26,26 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Zip it all up and upload to S3
+      - name: Upload dependencies to S3
         env:
           release_bucket: acestockbot
           release_bucket_uri: s3://acestockbot
           release_id: deps.zip
           release_layer: ACEBot_Dependencies
           function_name: ACEBot_handler
+          APP_ID: ${{ secrets.APP_ID}}
+          PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
+          # Package up the dependencies
           mkdir -p python/lib/python3.9/site-packages
           docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/; exit"
           zip --quiet -r $release_id python
-          
+
+          # Package up the InteractionHandler
+          python InteractionHandlerPickler.py
+          zip --quiet -r $release_id InteractionHandler.pickle
+
           echo "Uploading $release_id to $release_bucket_uri"
           aws s3 cp $release_id $release_bucket_uri
           aws lambda publish-layer-version --layer-name $release_layer  --content S3Bucket=$release_bucket,S3Key=$release_id --compatible-runtimes python3.9
