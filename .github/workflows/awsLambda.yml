@@ -40,8 +40,8 @@ jobs:
           # Package up the dependencies
           mkdir -p python/lib/python3.9/site-packages
 
-          env > env_vars && docker run --env-file ./env_vars -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/ \
-          && PYTHONPATH=python/lib/python3.9/site-packages python InteractionHandlerPickler.py; exit"
+          env > env_vars && docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/ \
+          && PYTHONPATH=python/lib/python3.9/site-packages python InteractionHandlerPickler.py; exit --env-file ./env_vars"
 
           zip --quiet -r $release_id python InteractionHandler.pickle
 
