@@ -26,7 +26,7 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Upload dependencies to S3
+      - name: Upload dependencies
         env:
           release_bucket: acestockbot
           release_bucket_uri: s3://acestockbot

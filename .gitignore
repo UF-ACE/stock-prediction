@@ -4,4 +4,3 @@ __pycache__
 .DS_Store
 /python
 *.zip
-env_vars
