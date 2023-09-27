@@ -36,12 +36,15 @@ jobs:
           APP_ID: ${{ secrets.APP_ID }}
           PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
         run: |
           # Package up the dependencies
           mkdir -p python/lib/python3.9/site-packages
 
-          docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/ \
-          && PYTHONPATH=python/lib/python3.9/site-packages python InteractionHandlerPickler.py; exit"
+          docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/; exit"
+
+          PYTHONPATH=python/lib/python3.9/site-packages python InteractionHandlerPickler.py
 
           zip --quiet -r $release_id python InteractionHandler.pickle
 
