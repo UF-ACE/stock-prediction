@@ -10,7 +10,6 @@ class CommandArg:
                 "value": self.value
             }
 
-
     class Types:
         STRING = 3
         INTEGER = 4
