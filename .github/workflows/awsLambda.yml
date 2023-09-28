@@ -83,4 +83,6 @@ jobs:
           aws_region: us-east-2
           function_name: ACEBot_handler
           zip_file: bundle.zip
-          environment: APP_ID=${{ secrets.APP_ID }},PUBLIC_KEY=${{ secrets.PUBLIC_KEY }},NEWS_API_KEY=${{ secrets.NEWS_API_KEY }},FINNHUB_API_KEY=${{ secrets.FINNHUB_API_KEY }}
+          environment: APP_ID=${{ secrets.APP_ID }},PUBLIC_KEY=${{ secrets.PUBLIC_KEY }},\
+          NEWS_API_KEY=${{ secrets.NEWS_API_KEY }},\
+          FINNHUB_API_KEY=${{ secrets.FINNHUB_API_KEY }}
