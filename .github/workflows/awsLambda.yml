@@ -35,8 +35,9 @@ jobs:
           function_name: ACEBot_handler
           APP_ID: ${{ secrets.APP_ID }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          #NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
-          #FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+          # Add all other environment variables below (they must be secrets on GitHub)
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
         run: |
           # Package up the dependencies
           mkdir -p python/lib/python3.9/site-packages
@@ -85,4 +86,4 @@ jobs:
           aws_region: us-east-2
           function_name: ACEBot_handler
           zip_file: bundle.zip
-          environment: APP_ID=${{ secrets.APP_ID }},PUBLIC_KEY=${{ secrets.PUBLIC_KEY }},NEWS_API_KEY=${{ secrets.NEWS_API_KEY }},FINNHUB_API_KEY=${{ secrets.FINNHUB_API_KEY }}
+          environment: APP_ID=${{ secrets.APP_ID }},PUBLIC_KEY=${{ secrets.PUBLIC_KEY }}
