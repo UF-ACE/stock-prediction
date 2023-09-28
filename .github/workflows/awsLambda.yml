@@ -7,7 +7,7 @@ on:
 jobs:
   upload_deps:
     if: github.repository != 'jaARke/discord-lambda-py'
-    name: Upload Layer to AWS Lambda
+    name: Upload Dependencies
     runs-on: ubuntu-latest
 
     steps:
@@ -26,17 +26,25 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Zip it all up and upload to S3
+      - name: Upload Dependencies
         env:
           release_bucket: acestockbot
           release_bucket_uri: s3://acestockbot
           release_id: deps.zip
           release_layer: ACEBot_Dependencies
+          function_name: ACEBot_handler
+          APP_ID: ${{ secrets.APP_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
+          # Package up the dependencies
           mkdir -p python/lib/python3.9/site-packages
+
           docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/; exit"
-          zip --quiet -r $release_id python
-          
+
+          PYTHONPATH=python/lib/python3.9/site-packages python -m discord_lambda.CommandRegistryPickler
+
+          zip --quiet -r $release_id python CommandRegistry.pickle
+
           echo "Uploading $release_id to $release_bucket_uri"
           aws s3 cp $release_id $release_bucket_uri
           aws lambda publish-layer-version --layer-name $release_layer  --content S3Bucket=$release_bucket,S3Key=$release_id --compatible-runtimes python3.9
@@ -51,11 +59,11 @@ jobs:
           layer_arn=$(aws lambda list-layer-versions --layer-name $release_layer --query 'LayerVersions[0].LayerVersionArn' --output text)
 
           # Update the lambda function to use the new layer
-          aws lambda update-function-configuration --function-name ACEBot_handler --layers $layer_arn
+          aws lambda update-function-configuration --function-name $function_name --layers $layer_arn
   
   upload_source:
     if: github.repository != 'jaARke/discord-lambda-py'
-    name: Upload Source to AWS Lambda
+    name: Upload Source
     runs-on: ubuntu-latest
 
     steps:
@@ -75,7 +83,8 @@ jobs:
           aws_region: us-east-2
           function_name: ACEBot_handler
           zip_file: bundle.zip
-      
-
-      
-
+          environment: 
+            APP_ID=${{ secrets.APP_ID }},
+            PUBLIC_KEY=${{ secrets.PUBLIC_KEY }},
+            NEWS_API_KEY=${{ secrets.NEWS_API_KEY }},
+            FINNHUB_API_KEY=${{ secrets.FINNHUB_API_KEY }}

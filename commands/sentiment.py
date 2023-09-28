@@ -22,12 +22,12 @@ def analyze_helper(embed: Embedding, headlines: list[dict]) -> None:
 
     # Add headline samples and results
     headlines_samples = ""
-    for i, headline in enumerate(headlines[:5]):
+    for i, headline in enumerate(headlines[:3]):
         headline['title'] = headline['title'].replace("\n", " ")
         headlines_samples += f"{i+1}. [{headline['title']}]({headline['link']})\n"
 
     headlines_sentiment = ""
-    for i, headline in enumerate(headlines[:5]):
+    for i, headline in enumerate(headlines[:3]):
         headlines_sentiment += f"{i+1}. {round(headline['score'], 2)} - {headline['sentiment']}\n"
     headlines_sentiment += f"**Average:** {round(headlines_avg, 2)}"
 

@@ -19,12 +19,12 @@ def help(inter: Interaction, command: str = "help") -> None:
         embed = Embedding("Sentiment Analysis", "Collects data, performs sentiment analysis on a company based on news and social media posts.", color=0x00FF00)
         embed.add_field("Usage", "`/sentiment <type> <company> <interval>`", False)
         embed.add_field("Parameters", 
-                        "`type`: can be \"data\" or \"analyze\" to choose between (only) collecting data or running an analysis\n" \
+                        "`type`: can be \"collect\" or \"analyze\" to choose between (only) collecting data or running an analysis\n" \
                         "`company`: the company to analyze; can be a company name or ticker symbol\n" \
                         "`interval`: the timespan (days into the past) to collect data from; must be in [1, 30]; default is 7 days\n", 
                         False)
         embed.add_field("Examples", 
-                        "`/sentiment data Apple`\n" \
+                        "`/sentiment collect Apple`\n" \
                         "`/sentiment analyze AAPL 30`\n",
                          False)
     
