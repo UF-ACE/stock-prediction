@@ -67,6 +67,20 @@ class Interaction:
         return response
     
 
+    def ping_response(self) -> None:
+        try:
+            requests.post(self.callback_url, json={"type": 1}).raise_for_status()
+        except Exception as e:
+            raise Exception(f"Unable to send ping response: {e}")
+
+
+    def defer(self, ephemeral: bool = True) -> None:
+        try:
+            requests.post(self.callback_url, json={"type": 5, "data": {"flags": 1 << 6 if ephemeral else None}}).raise_for_status()
+        except Exception as e:
+            raise Exception(f"Unable to defer response: {e}")
+    
+
     def send_response(self, content: str = None, embeds: list[Embedding] = None, ephemeral: bool = True) -> None:
         try:
             requests.patch(self.webhook_url, json=self.__create_channel_message(content, embeds, ephemeral)).raise_for_status()
