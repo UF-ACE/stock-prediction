@@ -7,7 +7,7 @@ on:
 jobs:
   upload_deps:
     if: github.repository != 'jaARke/discord-lambda-py'
-    name: Upload Layer to AWS Lambda
+    name: Upload Dependencies
     runs-on: ubuntu-latest
 
     steps:
