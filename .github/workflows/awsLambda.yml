@@ -34,7 +34,6 @@ jobs:
           release_layer: ACEBot_Dependencies
           function_name: ACEBot_handler
           APP_ID: ${{ secrets.APP_ID }}
-          PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
@@ -44,9 +43,9 @@ jobs:
 
           docker run -v "$PWD":/var/task "public.ecr.aws/sam/build-python3.9" /bin/sh -c "pip install -r requirements.txt -t python/lib/python3.9/site-packages/; exit"
 
-          PYTHONPATH=python/lib/python3.9/site-packages python -m discord_lambda.InteractionHandlerPickler
+          PYTHONPATH=python/lib/python3.9/site-packages python -m discord_lambda.CommandRegistryPickler
 
-          zip --quiet -r $release_id python InteractionHandler.pickle
+          zip --quiet -r $release_id python CommandRegistry.pickle
 
           echo "Uploading $release_id to $release_bucket_uri"
           aws s3 cp $release_id $release_bucket_uri
@@ -86,3 +85,4 @@ jobs:
           aws_region: us-east-2
           function_name: ACEBot_handler
           zip_file: bundle.zip
+          environment: APP_ID=${{ secrets.APP_ID }},PUBLIC_KEY=${{ secrets.PUBLIC_KEY }}
