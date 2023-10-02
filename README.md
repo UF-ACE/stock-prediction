@@ -1,11 +1,29 @@
 # ACE Stock Prediction Engine
-Attempts to provide a comprehensive analysis of stock behavior using two primary data channels: online sentiment and historic trends. This data is analyzed with modern machine learning techniques before giving meaningful results back to the user.
 
-The project is split conceptually into 3 parts: sentiment analysis, trend analysis, and their union. Each of these parts will be discussed in detail below.
+The ACE Stock Prediction Engine is a comprehensive stock analysis tool that leverages online sentiment analysis and historical trends. This open-source project is split into three key components: sentiment analysis, trend analysis, and their integration. This readme aims to provide clear instructions for setting up and using the project effectively.
+
+## Table of Contents
+1. [Overview](#overview)
+2. [Getting Started](#getting-started)
+   - [Using Git](#using-git)
+   - [Project Environment + Execution Instructions](#project-environment-execution-instructions)
+3. [Contributing](#contributing)
+4. [License](#license)
+5. [Acknowledgments](#acknowledgments)
+6. [Screenshots](#screenshots)
+7. [FAQ](#faq)
+8. [Version History](#version-history)
+9. [Contact](#contact)
+10. [Security](#security)
+
+## Overview
+
+The ACE Stock Prediction Engine combines sentiment analysis and historical data to provide valuable insights into stock behavior. It assists users in making informed investment decisions.
 
 For general information on creating and using a custom Discord bot, see [this article](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token). These steps will need to be followed in order to interact with this project.
 
 ## Getting Started
+
 ### Using Git
 You'll first need to fork this repository. Then, to clone the fork to your local machine, use the following command: <br>
 `git clone https://github.com/your-username/forked-repository.git`
@@ -43,4 +61,31 @@ To run the project, please verify the following:
 After verifying these items, the bot can be run with the command: <br>
 `python3 bot.py`
 
+### Contributing
+We welcome contributions! Follow these steps to contribute:
+
+- Fork the repository.
+- Create a new branch: git checkout -b yourname-branchname
+- Make your changes, commit, and push.
+- Submit a pull request to the original repository.
+- License
+- This project is licensed under the LICENSE_NAME License.
+
+### Acknowledgments
+We acknowledge the creators of the third-party libraries and APIs that power this project.
+
+### Screenshots
+(Add relevant screenshots or visual aids here.)
+
+### FAQ
+(Include common questions and their solutions, if any.)
+
+### Version History
+(Keep a changelog to document updates, bug fixes, and new features.)
+
+### Contact
+(Provide contact information or links to community forums.)
+
+### Security
+(Include security considerations or best practices, if applicable.)
 ## Sentiment Analysis
