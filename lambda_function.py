@@ -24,7 +24,7 @@ def lambda_handler(event, context):
     interaction = Interaction(event.get("body-json"), os.environ.get('APP_ID'))
 
     if interaction.type == 1:
-        interaction.ping_response()
+        return Interaction.PING_RESPONSE
     
     elif interaction.type == 2:
         interaction.defer(ephemeral=True)
