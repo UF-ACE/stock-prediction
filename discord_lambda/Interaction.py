@@ -48,6 +48,8 @@ class Embedding:
 
 
 class Interaction:
+    PING_RESPONSE = { "type": 1 }
+
     def __init__(self, interaction: dict, app_id: str) -> None:
         self.type = interaction.get("type")
         self.token = interaction.get("token")
@@ -65,13 +67,6 @@ class Interaction:
             "flags": 1 << 6 if ephemeral else None
         }
         return response
-    
-
-    def ping_response(self) -> None:
-        try:
-            requests.post(self.callback_url, json={"type": 1}).raise_for_status()
-        except Exception as e:
-            raise Exception(f"Unable to send ping response: {e}")
 
 
     def defer(self, ephemeral: bool = True) -> None:

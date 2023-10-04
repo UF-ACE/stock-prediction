@@ -3,6 +3,7 @@ name: Deploy to Lambda
 on:
   push:
     branches: [ main, sentiment-analysis ]
+  workflow_dispatch:
 
 jobs:
   upload_deps:
