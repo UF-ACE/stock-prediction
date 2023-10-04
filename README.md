@@ -1,9 +1,9 @@
 # ACE Stock Prediction Engine
 Attempts to provide a comprehensive analysis of stock behavior using two primary data channels: online sentiment and historic trends. This data is analyzed with modern machine learning techniques before giving meaningful results back to the user.
 
-The project is split conceptually into 3 parts: sentiment analysis, trend analysis, and their union. Each of these parts will be discussed in detail below.
+Below you will find descriptions and usages of supported commands, as well as a brief explanation of how those commands are implemented "behind-the-scenes."
 
-For general information on creating and using a custom Discord bot, see [this article](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token). These steps will need to be followed in order to interact with this project.
+This project uses [this template](https://github.com/jaARke/discord-lambda-py) for creating a serverless Discord bot using Python. Review the instructions in the template's README (specifically, the "Development" section) for some useful background.
 
 ## Getting Started
 ### Using Git
@@ -28,19 +28,35 @@ To submit changes to the original repo, follow the steps below:
 	- `git push --set-upstream origin yourname-branchname`
 - Submit a pull request -> be sure to select the correct base branch in the original repo
 
-### Project Environment + Execution Instructions
-To run the project, please verify the following:
-- [ ] This project uses Python3. You will need to have a compatible version of Python installed in order to make + test changes.
+### Project Environment + Contributing
+This project uses Python 3.9. You can download the latest version of Python [here](https://www.python.org/downloads/).
 
-- [ ] A list of required packages can be found in `requirements.txt`. These can be installed automatically using the following command: <br>
-`pip install -r requirements.txt`
+Additional commands should be added to files in the `/commands` directory. Reference the template linked above for more information on command function structure.
 
-- [ ] The project requires the following 3 environment variables be added to a `.env` file in the format specified by `.env_sample`:
-	- Discord bot token (see: [Creating a discord bot & getting a token](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token))
-	- NewsAPI key (see: [NewsAPI website](https://newsapi.org/))
-	- FinnHub API key (see: [FinnHub website](https://finnhub.io/))
+Helper functions harnessed by commands should be added to `/utils`. These functions should be unit tested.
 
-After verifying these items, the bot can be run with the command: <br>
-`python3 bot.py`
+Given the nature of this project, it is difficult to test new functionality locally. Changes made are only reflected in our bot when those changes are pushed to the `master` branch of this repo. That being said, ensure the following before submitting a pull request:
+ - [ ] All new command functionality is thoroughly unit tested. Discord-specific context aside, this will ensure that a function you've created produces the expected output for a given input. This is especially important for functions that rely on external data sources, such as the stock market API.
+ - [ ] All new command functionality is documented in the `README.md` file. This includes a description of the command, its usage, and any other relevant information.
+ - [ ] All command requirements are noted in the `requirements.txt` file. This includes any new packages that need to be installed for the command to work.
+ - [ ] All relevant API keys are noted in `.env_sample`, `README`, and described in the notes of the pull request. This will ensure these variables can be added to the production environment when the time comes.
+
+ ### API Keys
+Below is a list of the APIs that this project uses. Local data retrieval (execution of some of the functions in `/utils`) will require that keys for these API are specified in a `.env` file on your local machine.
+- [Finnhub](https://finnhub.io/)
+- [News API](https://newsapi.org/)
+
 
 ## Sentiment Analysis
+### Overview
+Sentiment analysis involves mapping a user's query to a valid stock ticker, collecting headlines related to that stock, and analyzing the sentiment of those headlines. The sentiment analysis is performed using the [VADER](https://github.com/cjhutto/vaderSentiment) library, which is a lexicon and rule-based sentiment analysis tool that is specifically attuned to sentiments expressed in social media. The analysis returns a compound sentiment score, which is a value in the range [-1, 1] that represents the overall sentiment of the text. A score of -1 indicates extremely negative sentiment, while a score of 1 indicates extremely positive sentiment.
+
+News headlines are collected from FinnHub, News API, Google News, and Yahoo Finance.
+### Commands
+#### `/sentiment [type] [company] [interval]`
+- **Description:** Collects and (optionally) analyzes sentiment data for a given stock ticker over a given time interval.
+- **Usage:**
+	- `[type]` is one of `collect` or `analyze`, and specifies whether the commands should (only) collect data or run an analysis
+	- `[company]` is a valid stock ticker or company name
+	- `[interval]` is an integer in the range [1, 30] and specifies the number of days of data to collect
+- **Returns:** A total number of headlines collected, and three sample headlines. If the `analyze` option is specified, the command will also return a sentiment analysis of the collected headlines. The user will be warned if the command fails to find more than 25 headlines.
